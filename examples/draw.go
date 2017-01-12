@@ -6,7 +6,7 @@ import (
 	"time"
 	"math/rand"
 	"net/http"
-	"github.com/esimov/gospline/geom"
+	"github.com/esimov/gospline"
 	"os"
 	"log"
 )
@@ -88,29 +88,28 @@ func main()  {
 		[]float64{ 100.0, 175.0 },
 	}*/
 
-	svg := &geom.SVG{
+	svg := &spline.SVG{
 		Width: 800,
 		Height: 800,
 		Title: "BSpline",
-		Lines: []geom.Line{},
+		Lines: []spline.Line{},
 		Color: color.NRGBA{R:255,G:0,B:0,A:255},
 		Description: "Convert straight lines to curves",
 		StrokeWidth: 2,
 		StrokeLineCap: "round", //butt, round, square
 	}
 
-	raster := &geom.Image{
+	raster := &spline.Image{
 		Width : 800,
 		Height : 800,
 		Color : color.NRGBA{R:255,G:0,B:0,A:255},
 	}
 
-	drawers := []geom.ImageDrawer{svg, raster}
+	drawers := []spline.ImageDrawer{svg, raster}
 	for _, drawer := range drawers {
 		switch drawer.(type) {
-		case *geom.SVG:
-			//drawer.Draw(os.Stdout, points, false)
-			if (len(os.Args) > 1 && os.Args[1] == "web") {
+		case *spline.SVG:
+			if (len(os.Args) > 1 && os.Args[1] == "--web") {
 				handler := func(w http.ResponseWriter, r *http.Request) {
 					w.Header().Set("Content-Type", "image/svg+xml")
 					drawer.Draw(w, points, false)
@@ -119,7 +118,7 @@ func main()  {
 				log.Fatal(http.ListenAndServe("localhost:8000", nil))
 				return
 			}
-		case *geom.Image:
+		case *spline.Image:
 			output, _ := os.Create("./samples/curve_" + randSeq(4, rng) +".png")
 			defer output.Close()
 			drawer.Draw(output, points, true)

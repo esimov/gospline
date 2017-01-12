@@ -1,4 +1,4 @@
-package geom
+package spline
 
 import (
 	"image"
