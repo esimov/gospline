@@ -5,8 +5,13 @@ import (
 	_ "image/jpeg"
 	"time"
 	"math/rand"
+	"net/http"
 	"github.com/esimov/gospline/geom"
+	"os"
+	"log"
 )
+
+var letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 func main()  {
 	var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -90,8 +95,8 @@ func main()  {
 		Lines: []geom.Line{},
 		Color: color.NRGBA{R:255,G:0,B:0,A:255},
 		Description: "Convert straight lines to curves",
-		StrokeWidth: 6,
-		StrokeLineCap: "round",
+		StrokeWidth: 2,
+		StrokeLineCap: "round", //butt, round, square
 	}
 
 	raster := &geom.Image{
@@ -104,13 +109,32 @@ func main()  {
 	for _, drawer := range drawers {
 		switch drawer.(type) {
 		case *geom.SVG:
-			drawer.Draw(points, false)
+			//drawer.Draw(os.Stdout, points, false)
+			if (len(os.Args) > 1 && os.Args[1] == "web") {
+				handler := func(w http.ResponseWriter, r *http.Request) {
+					w.Header().Set("Content-Type", "image/svg+xml")
+					drawer.Draw(w, points, false)
+				}
+				http.HandleFunc("/", handler)
+				log.Fatal(http.ListenAndServe("localhost:8000", nil))
+				return
+			}
 		case *geom.Image:
-			drawer.Draw(points, true)
+			output, _ := os.Create("./samples/curve_" + randSeq(4, rng) +".png")
+			defer output.Close()
+			drawer.Draw(output, points, true)
 		}
 	}
 }
 
 func randInt(min, max int, rng *rand.Rand) int {
 	return rng.Intn(max-min) + min
+}
+
+func randSeq(n int, rng *rand.Rand) string {
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letters[randInt(0, len(letters), rng)]
+	}
+	return string(b)
 }

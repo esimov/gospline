@@ -8,10 +8,11 @@ import (
 	"os"
 	"fmt"
 	"text/template"
+	"io"
 )
 
 type ImageDrawer interface {
-	Draw([][]float64, bool)
+	Draw(io.Writer, [][]float64, bool)
 }
 
 type Point struct {
@@ -45,7 +46,7 @@ func Pt(x float64, y float64) Point {
 	return Point{X: x, Y: y}
 }
 
-func (svg *SVG) Draw(points [][]float64, debug bool) {
+func (svg *SVG) Draw(output io.Writer, points [][]float64, debug bool) {
 	const TEMPLATE = `<?xml version="1.0" ?>
 	<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
 	  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
@@ -82,13 +83,13 @@ func (svg *SVG) Draw(points [][]float64, debug bool) {
 	svg.Lines = lines
 
 	tmpl := template.Must(template.New("svg").Parse(TEMPLATE))
-	if err := tmpl.Execute(os.Stdout, svg); err != nil {
+	if err := tmpl.Execute(output, svg); err != nil {
 		fmt.Printf("Error: %v\n", err)
 		os.Exit(1)
 	}
 }
 
-func (img *Image) Draw(points [][]float64, debug bool) {
+func (img *Image) Draw(output io.Writer, points [][]float64, debug bool) {
 	matrix := Identity()
 	canvas := Canvas{
 		image.NewRGBA(image.Rect(0, 0, img.Width, img.Height)),
@@ -115,9 +116,6 @@ func (img *Image) Draw(points [][]float64, debug bool) {
 			raster = canvas.DrawLine(points[i][0], points[i][1], points[i+1][0], points[i+1][1], color.NRGBA{R:155,G:155,B:155,A:255}, false)
 		}
 	}
-
-	output, _ := os.Create("./samples/curve.png")
-	defer output.Close()
 
 	png.Encode(output, raster)
 }
