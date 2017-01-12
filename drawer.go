@@ -102,19 +102,19 @@ func (img *Image) Draw(output io.Writer, points [][]float64, debug bool) {
 	var interpol []float64
 	var raster *Canvas
 
+	// Draw original line
+	if debug {
+		for i:=0; i < len(points)-1; i++ {
+			raster = canvas.DrawLine(points[i][0], points[i][1], points[i+1][0], points[i+1][1], color.NRGBA{R:155,G:155,B:155,A:155}, false)
+		}
+	}
+
 	for t := 0.0; t <= 1.0; t += 0.001 {
 		interpol = spline.Interpolate(t, 0.5)
 		x := interpol[0]
 		y := interpol[1]
 		raster = canvas.DrawLine(oldX, oldY, x, y, img.Color, true)
 		oldX, oldY = x, y
-	}
-
-	// Draw original line
-	if debug {
-		for i:=0; i < len(points)-1; i++ {
-			raster = canvas.DrawLine(points[i][0], points[i][1], points[i+1][0], points[i+1][1], color.NRGBA{R:155,G:155,B:155,A:255}, false)
-		}
 	}
 
 	png.Encode(output, raster)

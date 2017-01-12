@@ -53,9 +53,9 @@ func bresenhamLine(img *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas
 
 	for x := x1; x <= x2; x++ {
 		if steep {
-			img.Set(int(y), int(x), color.NRGBA{col.R, col.G, col.B, 255})
+			img.Set(int(y), int(x), color.NRGBA{col.R, col.G, col.B, col.A})
 		} else {
-			img.Set(int(x), int(y), color.NRGBA{col.R, col.G, col.B, 255})
+			img.Set(int(x), int(y), color.NRGBA{col.R, col.G, col.B, col.A})
 		}
 		err -= dy
 		if err < 0 {

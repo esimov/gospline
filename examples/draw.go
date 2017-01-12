@@ -105,6 +105,9 @@ func main()  {
 		Height : height,
 		Color : color.NRGBA{R:255,G:0,B:0,A:255},
 	}
+	output, _ := os.Create("./samples/curve.png")
+	defer output.Close()
+	raster.Draw(output, points, true)
 
 	drawers := []spline.ImageDrawer{svg, raster}
 	for _, drawer := range drawers {
@@ -117,7 +120,6 @@ func main()  {
 				}
 				http.HandleFunc("/", handler)
 				log.Fatal(http.ListenAndServe("localhost:8000", nil))
-				return
 			}
 		case *spline.Image:
 			output, _ := os.Create("./samples/curve_" + randSeq(4, rng) +".png")
