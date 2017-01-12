@@ -16,10 +16,11 @@ var letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 func main()  {
 	var rng = rand.New(rand.NewSource(time.Now().UnixNano()))
 	var points [][]float64
+	var width, height int = 800, 600
 
 	for i := 0; i < 20; i++ {
-		x := randInt(0, 800, rng)
-		y := randInt(0, 800, rng)
+		x := randInt(0, width, rng)
+		y := randInt(0, height, rng)
 		point := []float64{float64(x), float64(y)}
 		points = append(points, point)
 	}
@@ -89,8 +90,8 @@ func main()  {
 	}*/
 
 	svg := &spline.SVG{
-		Width: 800,
-		Height: 800,
+		Width: width,
+		Height: height,
 		Title: "BSpline",
 		Lines: []spline.Line{},
 		Color: color.NRGBA{R:255,G:0,B:0,A:255},
@@ -100,8 +101,8 @@ func main()  {
 	}
 
 	raster := &spline.Image{
-		Width : 800,
-		Height : 800,
+		Width : width,
+		Height : height,
 		Color : color.NRGBA{R:255,G:0,B:0,A:255},
 	}
 
