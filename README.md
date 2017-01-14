@@ -68,3 +68,7 @@ if debug {
 ```
 This will produce an image like this with antialiasing mode set to true.
 <img alt="BSPline" title="BSpline" src="https://raw.githubusercontent.com/esimov/gospline/master/samples/curve.png"/>
+
+## Licence
+
+This library is under MIT License.
