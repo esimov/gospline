@@ -71,4 +71,4 @@ This will produce an image like this with antialiasing mode set to true.
 
 ## Licence
 
-This library is under MIT License.
+This software is distributed under the MIT license found in the LICENSE file.
