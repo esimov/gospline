@@ -1,7 +1,7 @@
 # gospline
-Gospline is little Go library to transform straight lines into curves. I'ts based on https://github.com/Tagussan/BSpline javascript library. Because the library includes pre-calculated uniform-knot b-spline basis, it's very fast. 
+Gospline is little Go library to transform straight lines into curves. I'ts based on https://github.com/Tagussan/BSpline javascript library.
 
-The library is written in such a way, that it can be plugged in to different rendering methods. The provided examples outputs the resulted curves into image and svg, but because Go modularity it permits to use other type of outputs, until it implements the <a href="https://golang.org/pkg/io/#Writer">io.Writer</a> interface.
+The library is written in such a way, that it can be plugged in to different rendering methods. The provided examples outputs the resulted curves into image and svg, but because Go modularity it permits to use other type of outputs, until they implements the <a href="https://golang.org/pkg/io/#Writer">io.Writer</a> interface.
 
 To render the output as image, the library implements the <a href="https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm">Xiaolin Wu</a> antialiasing method, if the provided parameter is true, otherwise it implements the <a href="https://en.wikipedia.org/wiki/Bresenham's_line_algorithm">Bresenham</a> line algorithm. This means the library is not based on <a href="https://github.com/golang/freetype/">github.com/golang/freetype/raster</a> for drawing.
 
@@ -22,6 +22,14 @@ go get github.com/esimov/gospline
 ```
 
 ## Examples
+This is how you initialize the method:
+
+```go
+spline := NewBSpline(points, 3, false)
+spline.Init()
+```
+...where the 2nd paramether means the degree of curvature. 
+
 Here is an example to render the spline as svg in the web browser.
 
 ```go
@@ -43,7 +51,7 @@ handler := func(w http.ResponseWriter, r *http.Request) {
 http.HandleFunc("/", handler)
 http.ListenAndServe("localhost:8000", nil)
 ```
-The correspondig method to render into an image.
+The correspondig method to render as image.
 
 ```go
 raster := &spline.Image{
@@ -56,7 +64,7 @@ defer output.Close()
 raster.Draw(output, points, true)
 ```
 
-If you wish to render the result as an image you can use the debug option:
+You can even use the debug option to show the original lines.
 
 ```go
 // Draw original line
