@@ -22,7 +22,10 @@ go get github.com/esimov/gospline
 ```
 
 ## Examples
-This is how you initialize the method:
+There are some test files included into the <strong>example</strong> directory. To run them type:
+`go run examples/draw.go`
+
+This is how you initialize the base method:
 
 ```go
 spline := NewBSpline(points, 3, false)
@@ -77,6 +80,6 @@ if debug {
 This will produce an image like this with antialiasing mode set to true.
 <img alt="BSPline" title="BSpline" src="https://raw.githubusercontent.com/esimov/gospline/master/samples/curve.png"/>
 
-## Licence
+## License
 
 This software is distributed under the MIT license found in the LICENSE file.
