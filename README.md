@@ -23,7 +23,7 @@ go get github.com/esimov/gospline
 
 ## Examples
 There are some test files included into the <strong>example</strong> directory. To run them type:
-`go run examples/draw.go`
+`go run examples/draw.go` for example.
 
 This is how you initialize the base method:
 
