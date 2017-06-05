@@ -11,20 +11,20 @@ type Canvas struct {
 	Matrix
 }
 
-func (img *Canvas) DrawLine(x1, y1, x2, y2 float64, col color.Color, antialiased bool) *Canvas {
+func (canvas *Canvas) DrawLine(x1, y1, x2, y2 float64, col color.Color, antialiased bool) *Canvas {
 	if antialiased {
-		xiaolinWuLine(img, x1, y1, x2, y2, col.(color.NRGBA))
+		xiaolinWuLine(canvas, x1, y1, x2, y2, col.(color.NRGBA))
 	} else {
-		bresenhamLine(img, x1, y1, x2, y2, col.(color.NRGBA))
+		bresenhamLine(canvas, x1, y1, x2, y2, col.(color.NRGBA))
 	}
-	return img
+	return canvas
 }
 
 // Bresenham's line algorithm
 // http://en.wikipedia.org/wiki/Bresenham's_line_algorithm
-func bresenhamLine(img *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas {
-	x1, y1 = img.TransformPoint(x1, y1)
-	x2, y2 = img.TransformPoint(x2, y2)
+func bresenhamLine(canvas *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas {
+	x1, y1 = canvas.TransformPoint(x1, y1)
+	x2, y2 = canvas.TransformPoint(x2, y2)
 
 	abs := func(i float64) float64 {
 		if i < 0 {
@@ -53,9 +53,9 @@ func bresenhamLine(img *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas
 
 	for x := x1; x <= x2; x++ {
 		if steep {
-			img.Set(int(y), int(x), color.NRGBA{col.R, col.G, col.B, col.A})
+			canvas.Set(int(y), int(x), color.NRGBA{col.R, col.G, col.B, col.A})
 		} else {
-			img.Set(int(x), int(y), color.NRGBA{col.R, col.G, col.B, col.A})
+			canvas.Set(int(x), int(y), color.NRGBA{col.R, col.G, col.B, col.A})
 		}
 		err -= dy
 		if err < 0 {
@@ -63,12 +63,12 @@ func bresenhamLine(img *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas
 			err += dx
 		}
 	}
-	return img
+	return canvas
 }
 
 // Xialin Wu's antialiased line algorithm
 // https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm
-func xiaolinWuLine(img *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas {
+func xiaolinWuLine(canvas *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas {
 	ipart := func(x float64) float64 {
 		return math.Floor(x)
 	}
@@ -84,8 +84,8 @@ func xiaolinWuLine(img *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas
 	rfpart := func(x float64) float64 {
 		return 1 - fpart(x)
 	}
-	x1, y1 = img.TransformPoint(x1, y1)
-	x2, y2 = img.TransformPoint(x2, y2)
+	x1, y1 = canvas.TransformPoint(x1, y1)
+	x2, y2 = canvas.TransformPoint(x2, y2)
 	dx := x2 - x1
 	dy := y2 - y1
 	ax := dx
@@ -104,11 +104,11 @@ func xiaolinWuLine(img *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas
 		x2, y2 = y2, x2
 		dx, dy = dy, dx
 		plot = func(x, y int, c float64) {
-			img.Set(y, x, color.NRGBA{col.R, col.G, col.B, uint8(255 * c)})
+			canvas.Set(y, x, color.NRGBA{col.R, col.G, col.B, uint8(255 * c)})
 		}
 	} else {
 		plot = func(x, y int, c float64) {
-			img.Set(x, y, color.NRGBA{col.R, col.G, col.B, uint8(255 * c)})
+			canvas.Set(x, y, color.NRGBA{col.R, col.G, col.B, uint8(255 * c)})
 		}
 	}
 	if x2 < x1 {
@@ -143,5 +143,5 @@ func xiaolinWuLine(img *Canvas, x1, y1, x2, y2 float64, col color.NRGBA) *Canvas
 		plot(x, int(ipart(intery))+1, fpart(intery))
 		intery = intery + gradient
 	}
-	return img
+	return canvas
 }
