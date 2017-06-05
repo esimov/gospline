@@ -29,7 +29,7 @@ func main()  {
 		Lines: []spline.Line{},
 		Color: color.NRGBA{R:255,G:0,B:0,A:255},
 		Description: "Convert straight lines to curves",
-		StrokeWidth: 2,
+		StrokeWidth: 3,
 		StrokeLineCap: "round", //butt, round, square
 	}
 
