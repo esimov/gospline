@@ -1,9 +1,9 @@
 # gospline
-Gospline is little Go library to transform straight lines into curves. The core algorithm is mainly based on https://github.com/Tagussan/BSpline.
+Gospline is little Go library for transforming straight lines into curves. The core algorithm is mainly based on https://github.com/Tagussan/BSpline.
 
-The library is written in a modular way which means that it can be plugged in into different rendering methods. The examples provided below renders the resulted curves into image and svg, but since it has been developed using Go's philosophy of inheritance over encapsulation, it enables other types of outputs, until they implements the <a href="https://golang.org/pkg/io/#Writer">io.Writer</a> interface.
+The library is written in a modular way which means that it can be plugged in into different rendering methods. The examples provided below renders the resulted curves into image and svg, but since it has been developed using Go's philosophy of inheritance over encapsulation, it should supports other types of outputs until they implements the <a href="https://golang.org/pkg/io/#Writer">io.Writer</a> interface.
 
-To render the output as image, the library implements the <a href="https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm">Xiaolin Wu</a> antialiasing method, if the provided parameter is true, otherwise it implements the <a href="https://en.wikipedia.org/wiki/Bresenham's_line_algorithm">Bresenham</a> line algorithm. This means the library is not using the <a href="https://github.com/golang/freetype/">github.com/golang/freetype/raster</a> package for rendering.
+To render the output as image, the library implements the <a href="https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm">Xiaolin Wu</a> antialiasing method, if the provided parameter is true, otherwise it implements the <a href="https://en.wikipedia.org/wiki/Bresenham's_line_algorithm">Bresenham</a> line algorithm. This means the library is not using the default Go <a href="https://github.com/golang/freetype/">github.com/golang/freetype/raster</a> package for rendering.
 
 ```go
 func (img *Canvas) DrawLine(x1, y1, x2, y2 float64, col color.Color, antialiased bool) *Canvas {
@@ -18,11 +18,11 @@ func (img *Canvas) DrawLine(x1, y1, x2, y2 float64, col color.Color, antialiased
 
 ## Installation
 ```bash
-go get github.com/esimov/gospline
+$ go get -u -f github.com/esimov/gospline
 ```
 
 ## Examples
-There are some test files included into the <strong>example</strong> directory. To run them type:
+Some test files have been included into the <strong>example</strong> directory. To run them type:
 `go run examples/draw.go` for example.
 
 This is how you initialize the base method:
@@ -33,7 +33,7 @@ spline.Init()
 ```
 ...where the 2nd paramether means the degree of curvature. 
 
-Here is an example to render the spline as svg in the web browser.
+Below is an example to render the spline as svg in the web browser.
 
 ```go
 svg := &spline.SVG{
@@ -54,7 +54,7 @@ handler := func(w http.ResponseWriter, r *http.Request) {
 http.HandleFunc("/", handler)
 http.ListenAndServe("localhost:8000", nil)
 ```
-The corresponding method to render as image.
+and the corresponding method to render the output into an image.
 
 ```go
 raster := &spline.Image{
