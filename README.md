@@ -1,9 +1,9 @@
 # gospline
-Gospline is little Go library to transform straight lines into curves. I'ts based on https://github.com/Tagussan/BSpline javascript library.
+Gospline is little Go library to transform straight lines into curves. The core algorithm is mainly based on https://github.com/Tagussan/BSpline library.
 
-The library is written in such a way, that it can be plugged into different rendering methods. The provided examples outputs the resulted curves into image and svg, but because Go modularity it permits to use other type of outputs, until they implements the <a href="https://golang.org/pkg/io/#Writer">io.Writer</a> interface.
+The library is written in a modular way which means that it can be plugged in into different rendering methods. The examples provided below renders the resulted curves into image and svg, but since it has been developed using Go's philosophy of inheritance over encapsulation, it enables other types of outputs, until they implements the <a href="https://golang.org/pkg/io/#Writer">io.Writer</a> interface.
 
-To render the output as image, the library implements the <a href="https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm">Xiaolin Wu</a> antialiasing method, if the provided parameter is true, otherwise it implements the <a href="https://en.wikipedia.org/wiki/Bresenham's_line_algorithm">Bresenham</a> line algorithm. This means the library is not based on <a href="https://github.com/golang/freetype/">github.com/golang/freetype/raster</a> for drawing.
+To render the output as image, the library implements the <a href="https://en.wikipedia.org/wiki/Xiaolin_Wu's_line_algorithm">Xiaolin Wu</a> antialiasing method, if the provided parameter is true, otherwise it implements the <a href="https://en.wikipedia.org/wiki/Bresenham's_line_algorithm">Bresenham</a> line algorithm. This means the library is not using the <a href="https://github.com/golang/freetype/">github.com/golang/freetype/raster</a> package for rendering.
 
 ```go
 func (img *Canvas) DrawLine(x1, y1, x2, y2 float64, col color.Color, antialiased bool) *Canvas {
@@ -54,7 +54,7 @@ handler := func(w http.ResponseWriter, r *http.Request) {
 http.HandleFunc("/", handler)
 http.ListenAndServe("localhost:8000", nil)
 ```
-The correspondig method to render as image.
+The corresponding method to render as image.
 
 ```go
 raster := &spline.Image{
