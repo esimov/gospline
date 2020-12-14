@@ -1,5 +1,5 @@
 # gospline
-Gospline is little Go library for transforming straight lines into curves. The core algorithm is mainly based on https://github.com/Tagussan/BSpline.
+Gospline is little Go library for transforming straight lines into curves.
 
 The library is written in a modular way which means that it can be plugged in into different rendering methods. The examples provided below renders the resulted curves into image and svg, but since it has been developed using Go's philosophy of inheritance over encapsulation, it should supports other types of outputs until they implements the <a href="https://golang.org/pkg/io/#Writer">io.Writer</a> interface.
 
